@@ -1,7 +1,8 @@
 import React from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout } from 'antd';
 
 import NotesMenu from '../../components/NotesMenu';
+import NoteEditor from '../../components/NoteEditor';
 
 import {
     getNotes,
@@ -14,13 +15,14 @@ import { uuid } from '../../data/util';
 
 import './index.css';
 
-const { Header, Content } = Layout;
-
-export default class NotesPage extends React.Component {
+/**
+ * @type {Component}
+ */
+class NotesPage extends React.Component {
   state = {
     collapsed: false,
     notes: [],
-    editingNote: null
+    selectedNote: null
   };
 
   componentDidMount() {
@@ -29,15 +31,17 @@ export default class NotesPage extends React.Component {
 
   loadNotes = () => {
     const notes = getNotes();
-    this.setState({notes});
+    if(notes != null) {
+      this.setState({notes});
+    }
   }
 
-  setEditingNote = (noteId) => {
+  setselectedNote = (noteId) => {
     let note = this.state.notes.find((n) => {
         return noteId === n.id
     })
     this.setState({
-        editingNote: note
+        selectedNote: note
     })
   }
 
@@ -47,30 +51,42 @@ export default class NotesPage extends React.Component {
     });
   };
 
+  handleNewNote = () => {
+    let newNote = {
+      id: uuid(),
+      title: "",
+      content: {}
+    }
+
+    saveNote(newNote);
+    let notes = this.state.notes
+    notes.unshift(newNote)
+    this.setState({
+      selectedNote: newNote,
+      notes
+    })
+
+  }
+
   render() {
     return (
       <Layout className="NotesPage-layout">
-        <NotesMenu  collapsed={this.state.collapsed}></NotesMenu>
-        <Layout>
-          <Header style={{ background: '#fff', padding: 0 }}>
-            <Icon
-              className="NotesPage-trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
-          </Header>
-          <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              background: '#fff',
-              minHeight: 280,
-            }}
-          >
-            Content
-          </Content>
-        </Layout>
+        <NotesMenu  
+          collapsed={this.state.collapsed}
+          notes={this.state.notes}
+          newNote={this.handleNewNote}
+        />
+        <NoteEditor 
+          note={this.state.selectedNote}
+          collapsed={this.state.collapsed}
+          toggle={this.toggle}
+        />
       </Layout>
     );
   }
 }
+
+/**
+ * Export
+ */
+export default NotesPage;

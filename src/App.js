@@ -17,6 +17,9 @@ function App() {
           <Route path="/notes">
             <NotesPage></NotesPage>
           </Route>
+          <Route path="/notes/:id">
+            <NotesPage></NotesPage>
+          </Route>
           <Route path="/">
             <NotesPage></NotesPage>
           </Route>
