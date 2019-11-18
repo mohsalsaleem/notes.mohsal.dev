@@ -1,15 +1,22 @@
 export const getNotes = () => {
-    return localStorage.getItem('notes')
+    return JSON.parse(localStorage.getItem('notes'))
+}
+
+const setNotes = (notes) => {
+    localStorage.setItem('notes', JSON.stringify(notes));
 }
 
 export const saveNote = (note) => {
-    let notes = localStorage.getItem('notes')
+    let notes = getNotes()
+    if(notes === null || notes === undefined) {
+        notes = []
+    }
     notes.push(note)
-    localStorage.setItem('notes', notes);
+    setNotes(notes)
 }
 
 export const updateNote = (note) => {
-    let notes = localStorage.getItem('notes')
+    let notes = getNotes()
     let existingNoteIndex = notes.findIndex((n) => {
         return note.id === n.id;
     })
@@ -18,14 +25,14 @@ export const updateNote = (note) => {
     })
     let mergedNote = {...existingNote, ...note}
     notes[existingNoteIndex] = mergedNote
-    localStorage.setItem('notes', notes)
+    setNotes(notes)
 }
 
 export const deleteNote = (note) => {
-    let notes = localStorage.getItem('notes')
+    let notes = getNotes()
     let existingNoteIndex = notes.findIndex((n) => {
         return note.id === n.id;
     })
     notes.slice(existingNoteIndex, 1);
-    localStorage.setItem('notes', notes);
+    setNotes(notes)
 }

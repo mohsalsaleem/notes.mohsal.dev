@@ -2,19 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Icon, Input } from 'antd';
 import SlateEditor from '../SlateEditor';
 
+import './index.css';
+
 const { Header, Content } = Layout;
 
 function NoteEditor(props) {
     const [note, setNote] = useState(null);
 
     useEffect(() => {
-        setNote(note => props.note)
-    }, [])
+        setNote(props.note)
+    }, [props.note])
 
-    const handleTitleChange = (title) => {
-      setNote(note => {
-        return { ...note, title }
-      })
+    const handleTitleChange = (e) => {
+      const updatedNote = {
+        ...note,
+        title: e.target.value
+      }
+      props.handleNoteUpdate(updatedNote)
+    }
+
+    const handleContentChange = (content) => {
+      const updatedNote = {
+        ...note,
+        content
+      }
+      props.handleNoteUpdate(updatedNote)
     }
 
     return (
@@ -25,7 +37,15 @@ function NoteEditor(props) {
               type={props.toggle ? 'menu-unfold' : 'menu-fold'}
               onClick={props.toggle}
             />
-            <Input placeholder="Title here" defaultValue={note.title} />
+            {
+              note ? 
+              <Input 
+                id="NoteEditor-title"
+                placeholder="Title here" 
+                defaultValue={note.title}
+                onChange={handleTitleChange}
+              /> : null
+            }
           </Header>
           <Content
             style={{
@@ -35,7 +55,10 @@ function NoteEditor(props) {
               minHeight: 280,
             }}
           >
-            <SlateEditor content={note.content} />
+            {
+              note ? 
+              <SlateEditor content={note.content} id={note.id} onContentChange={handleContentChange} /> : null
+            }
           </Content>
         </Layout>
     )

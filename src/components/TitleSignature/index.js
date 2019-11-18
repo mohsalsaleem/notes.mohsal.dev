@@ -6,7 +6,7 @@ const TitleSignature = (props) => {
 
     useEffect(() => {
         setSignature(signature => converTitleToSignature(props.title))
-    }, [])
+    }, [props.title])
 
     const converTitleToSignature = (title) => {
         return title && title.length ? title[0] : "";

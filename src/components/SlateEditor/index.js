@@ -2,7 +2,6 @@ import { Editor } from 'slate-react'
 import { Value } from 'slate'
 
 import React from 'react'
-import initialValue from './value.json'
 import { isKeyHotkey } from 'is-hotkey'
 import { Button, Icon, Toolbar } from './components'
 import './index.css'
@@ -38,9 +37,14 @@ class SlateEditor extends React.Component {
    *
    * @type {Object}
    */
-
   state = {
-    value: Value.fromJSON(initialValue),
+    value: Value.fromJSON(this.props.content),
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.id !== this.props.id) {
+      this.setState({ value: Value.fromJSON(this.props.content) })
+    }
   }
 
   /**
@@ -223,6 +227,7 @@ class SlateEditor extends React.Component {
 
   onChange = ({ value }) => {
     this.setState({ value })
+    this.props.onContentChange(value.toJSON())
   }
 
   /**
