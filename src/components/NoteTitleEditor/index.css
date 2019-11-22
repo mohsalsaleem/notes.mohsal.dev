@@ -1,0 +1,28 @@
+.NoteTitleEditor-title-wrapper {
+    display: inline-block;
+    height: 100%;
+    width: 60%;
+    position: relative;
+}
+
+.NoteTitleEditor-title {
+    width: 100%;
+    border: 0;
+    height: 100%;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: white;
+}
+
+.NoteTitleEditor-title:focus {
+    border: 0 !important;
+    box-shadow: none;
+    background-color: aliceblue;
+}
+
+.NoteTitleEditor-text-count {
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    margin-left: 15px;;
+}

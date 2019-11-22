@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Icon, Input } from 'antd';
+import { Layout, Icon } from 'antd';
 import SlateEditor from '../SlateEditor';
 
-import './index.css';
+import WrappedNoteTitleEditor from '../NoteTitleEditor';
 
 const { Header, Content } = Layout;
 
@@ -39,12 +39,7 @@ function NoteEditor(props) {
             />
             {
               note ? 
-              <Input 
-                id="NoteEditor-title"
-                placeholder="Title here" 
-                defaultValue={note.title}
-                onChange={handleTitleChange}
-              /> : null
+              <WrappedNoteTitleEditor title={note.title} onChange={handleTitleChange} /> : null
             }
           </Header>
           <Content

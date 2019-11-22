@@ -16,10 +16,6 @@ import initialValue from '../../components/SlateEditor/value.json'
 
 import './index.css';
 
-const test = () => {
-  console.log('test')
-}
-
 /**
  * @type {Component}
  */
@@ -35,6 +31,7 @@ class NotesPage extends React.Component {
     super(props)
 
     this.handleNoteUpdate = debounce(this.handleNoteUpdate, 2000)
+    this.handleDeleteNote = this.handleDeleteNote.bind(this)
   }
 
   componentDidMount() {
@@ -60,6 +57,21 @@ class NotesPage extends React.Component {
         })
       }
       this.setState({notesReady: true})
+  }
+
+  initializeNewNote() {
+    let notes = getNotes();
+    let newNote = {
+      id: uuid(),
+      title: "",
+      content: initialValue
+    }
+    saveNote(newNote)
+    notes = [newNote]
+    this.setState({
+      selectedNote: newNote,
+      notes: notes
+    })
   }
 
   setselectedNote = (noteId) => {
@@ -122,6 +134,41 @@ class NotesPage extends React.Component {
     })
   }
 
+  handleDeleteNote = (noteId) => {
+    deleteNote(noteId)
+    const noteIndex = this.state.notes.findIndex(note => {
+      return note.id === noteId
+    })
+    const notes = this.state.notes
+
+    if(noteIndex > -1) {
+      notes = notes.splice(noteIndex, 1)
+      this.setState({
+        notes: notes
+      })
+    }
+
+    // If the note to be deleted is the last note on the list, set the note before the note to be deleted the current note.
+    if(noteIndex === notes.length - 1 && notes.length > 1) {
+      this.setState({
+        selectedNote: notes[noteIndex - 1]
+      })
+    }
+
+    // If the note to be deleted is the first note, make the second note in the list the selected note.
+    if(noteIndex === 0 && notes.length > 1) {
+      this.setState({
+        selectedNote: notes[noteIndex + 1]
+      })
+    }
+
+    // If note to be deleted is the last note available, create a new untitled note
+    if(noteIndex === 0 && notes.length === 1) {
+      this.initializeNewNote()
+    }
+
+  }
+
   render() {
     return (
       <Layout className="NotesPage-layout">
@@ -133,6 +180,7 @@ class NotesPage extends React.Component {
             newNote={this.handleNewNote}
             selectNote={this.handleNoteChange}
             selectedNoteId={this.state.selectedNote.id}
+            deleteNote={this.handleDeleteNote}
           /> : <Skeleton title active />
         }
         {

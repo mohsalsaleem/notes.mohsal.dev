@@ -1,0 +1,10 @@
+.NoteMenu-delete-note-icon:hover {
+    color: red;
+}
+
+.logo {
+    text-align: center;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+}
