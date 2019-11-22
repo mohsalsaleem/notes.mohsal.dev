@@ -20,7 +20,7 @@ class NotesMenu extends React.Component {
     return (
         <Sider theme="light" trigger={null} collapsedWidth="0" collapsible collapsed={this.props.collapsed}>
           <div className="logo">
-            <a href="https://mohsal.dev" target="_blank"><img src={logo} alt="logo" /></a>
+            <a href="https://mohsal.dev" target="_blank" rel="noopener noreferrer"><img src={logo} alt="logo" /></a>
           </div>
           <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} selectedKeys={[this.props.selectedNoteId]}>
             <Menu.Item key="1" onClick={this.props.newNote}>
